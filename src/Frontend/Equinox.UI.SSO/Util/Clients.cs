@@ -67,6 +67,68 @@ namespace Equinox.UI.SSO.Util
                         "UserManagementApi.write_access"
 
                     }
+                },
+
+                /*
+                 * User Management Client - OpenID Connect implicit flow client
+                 */
+                new Client
+                {
+                    ClientId = "IonicApp",
+                    ClientName = "User Management UI",
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,     
+                    RequireClientSecret = false,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = true,
+                    RedirectUris = { "http://www.google.com"},
+                    PostLogoutRedirectUris = { "http://localhost:4200/" },
+                    //AllowedCorsOrigins = { "http://localhost:4200" },
+                    AllowedCorsOrigins = { "*" },
+                    LogoUri = "~/images/clientLogo/1.jpg",
+                    AccessTokenType = AccessTokenType.Reference,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "picture",
+                        "UserManagementApi.full_access",
+                        "UserManagementApi.read_access",
+                        "UserManagementApi.write_access"
+
+                    },
+                    ClientSecrets =  {
+                        new Secret("secret".Sha256())
+                    },
+
+                },
+
+                // resource owner password grant client
+                new Client
+                {
+                    ClientId = "clientTeste",
+                    ClientName = "User Management UI",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    RequireClientSecret = false,
+                    RequireConsent = true,
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedCorsOrigins = { "*" },
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "picture",
+                        "UserManagementApi.full_access",
+                        "UserManagementApi.read_access",
+                        "UserManagementApi.write_access"
+
+                    }
                 }
 
             };

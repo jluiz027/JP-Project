@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Equinox.UI.SSO.Util;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -26,7 +27,15 @@ namespace Equinox.UI.SSO
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate)
                 .CreateLogger();
 
-            var host = CreateWebHostBuilder(args).Build();
+            var configuration = new ConfigurationBuilder()
+                                    .AddCommandLine(args)
+                                    .Build();
+
+            var hostUrl = configuration["hosturl"];
+            if (string.IsNullOrEmpty(hostUrl))
+                hostUrl = "http://0.0.0.0:5000";
+
+            var host = CreateWebHostBuilder(args).UseUrls(hostUrl).UseConfiguration(configuration).Build();
 
             // Uncomment this to seed upon startup, alternatively pass in `dotnet run / seed` to seed using CLI
             // await DbMigrationHelpers.EnsureSeedData(host);

@@ -35,6 +35,21 @@ namespace Equinox.UI.SSO
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => {
+                options.AddPolicy("AllowAllOrigins",
+                   builder =>
+                   {
+                       builder.AllowAnyOrigin();
+                   });
+                options.AddPolicy("Devlopment",
+                    builder => builder.WithOrigins("*", "*")
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            }
+           );
+
             // configure identity
             services.AddIdentity(Configuration);
             services.AddMvc();
@@ -68,6 +83,9 @@ namespace Equinox.UI.SSO
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("Devlopment");
+
             app.UseStaticFiles();
             app.UseIdentityServer();
             app.UseMvcWithDefaultRoute();

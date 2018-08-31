@@ -1,7 +1,11 @@
-﻿{
+{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost:5000/Equinox.UI.SSO",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:55413",
       "sslPort": 0
@@ -17,11 +21,16 @@
     },
     "Equinox.UI.SSO": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5000"
+    },
+    "IIS_Local": {
+      "commandName": "IIS",
+      "commandLineArgs": "--urls http://0.0.0.0:5000",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/Equinox.UI.SSO"
     }
   }
 }
