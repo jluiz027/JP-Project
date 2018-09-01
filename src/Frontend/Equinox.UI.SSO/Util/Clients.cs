@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Equinox.Infra.CrossCutting.Identity.Constants;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 
@@ -17,33 +18,33 @@ namespace Equinox.UI.SSO.Util
                 /*
                  * JP Project ID4 Admin Client
                  */
-	            new Client
-                {
+	           new Client
+               {
 
-                    ClientId = AuthorizationConsts.OidcClientId,
-                    ClientName = AuthorizationConsts.OidcClientId,
-                    ClientUri = AuthorizationConsts.IdentityAdminBaseUrl,
+                   ClientId = AuthorizationConsts.OidcClientId,
+                   ClientName = AuthorizationConsts.OidcClientId,
+                   ClientUri = AuthorizationConsts.IdentityAdminBaseUrl,
 
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
+                   AllowedGrantTypes = GrantTypes.Implicit,
+                   AllowAccessTokensViaBrowser = true,
 
-                    RedirectUris = { $"{AuthorizationConsts.IdentityAdminBaseUrl}/signin-oidc"},
-                    FrontChannelLogoutUri = $"{AuthorizationConsts.IdentityAdminBaseUrl}/signout-oidc",
-                    PostLogoutRedirectUris = { $"{AuthorizationConsts.IdentityAdminBaseUrl}/signout-callback-oidc"},
-                    AllowedCorsOrigins = { AuthorizationConsts.IdentityAdminBaseUrl },
+                   RedirectUris = { $"{AuthorizationConsts.IdentityAdminBaseUrl}/signin-oidc"},
+                   FrontChannelLogoutUri = $"{AuthorizationConsts.IdentityAdminBaseUrl}/signout-oidc",
+                   PostLogoutRedirectUris = { $"{AuthorizationConsts.IdentityAdminBaseUrl}/signout-callback-oidc"},
+                   AllowedCorsOrigins = { AuthorizationConsts.IdentityAdminBaseUrl },
 
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
-                        "roles"
-                    }
-                },
+                   AllowedScopes =
+                   {
+                       IdentityServerConstants.StandardScopes.OpenId,
+                       IdentityServerConstants.StandardScopes.Profile,
+                       IdentityServerConstants.StandardScopes.Email,
+                       "roles"
+                   }
+               },
 
                 /*
                  * User Management Client - OpenID Connect implicit flow client
-                 */
+                // */
                 new Client {
                     ClientId = "UserManagementUI",
                     ClientName = "User Management UI",
@@ -51,7 +52,7 @@ namespace Equinox.UI.SSO.Util
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = true,
-                    RedirectUris = { "http://localhost:4200/login-callback", "https://localhost:5003/swagger/oauth2-redirect.html" },
+                    RedirectUris = { "http://localhost:4200/login-callback" },
                     PostLogoutRedirectUris =  { "http://localhost:4200/" },
                     AllowedCorsOrigins = { "http://localhost:4200" },
                     LogoUri = "~/images/clientLogo/1.jpg",
@@ -61,11 +62,23 @@ namespace Equinox.UI.SSO.Util
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "picture",
-                        "UserManagementApi.full_access",
-                        "UserManagementApi.read_access",
-                        "UserManagementApi.write_access"
-
+                        JwtClaimTypes.Picture,
+                        "UserManagementApi.owner-content",
+                    }
+                },
+                new Client
+                {
+                    ClientId = "Swagger",
+                    ClientName = "Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris =
+                    {
+                        "https://localhost:5003/swagger/oauth2-redirect.html"
+                    },
+                    AllowedScopes =
+                    {
+                        "UserManagementApi.owner-content"
                     }
                 },
 
@@ -109,15 +122,12 @@ namespace Equinox.UI.SSO.Util
                 {
                     ClientId = "clientTeste",
                     ClientName = "User Management UI",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedGrantTypes = GrantTypes.Implicit,
                     RequireClientSecret = false,
                     RequireConsent = true,
+                    RedirectUris = { "http://www.google.com"},
                     AllowAccessTokensViaBrowser = true,
                     AllowedCorsOrigins = { "*" },
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

@@ -9,29 +9,23 @@ import { AuthGuard } from "./core/auth/auth.guard";
 
 
 export const routes: Routes = [
+    
+    { path: "", redirectTo: "login", pathMatch: "full" },
     {
-        path: "", component: DefaultLayoutComponent, canActivate: [AuthGuard], data: { title: "Home" },
+        path: "", 
+        component: DefaultLayoutComponent,
         children: [
-            { path: "home", loadChildren: "app/management/home/home.module#HomeModule" },
-            { path: "user", loadChildren: "app/management/user/user.module#UserModule" },
-
-            { path: "base", loadChildren: "./views/base/base.module#BaseModule" },
-            { path: "buttons", loadChildren: "./views/buttons/buttons.module#ButtonsModule" },
-            { path: "charts", loadChildren: "./views/chartjs/chartjs.module#ChartJSModule" },
-            { path: "dashboard", loadChildren: "./views/dashboard/dashboard.module#DashboardModule" },
-            { path: "icons", loadChildren: "./views/icons/icons.module#IconsModule" },
-            { path: "notifications", loadChildren: "./views/notifications/notifications.module#NotificationsModule" },
-            { path: "theme", loadChildren: "./views/theme/theme.module#ThemeModule" },
-            { path: "widgets", loadChildren: "./views/widgets/widgets.module#WidgetsModule" }
+            { path: "", loadChildren: "app/management/management.module#ManagementModule" },
         ]
-    }
+    },
+    { path: "**", redirectTo: "404" }
 ];
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes),
         PagesModule,
-        
+        RouterModule.forRoot(routes),
+
     ],
     exports: [RouterModule],
     providers: [AuthGuard]

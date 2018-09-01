@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace Equinox.UI.SSO.Util
@@ -8,7 +9,7 @@ namespace Equinox.UI.SSO.Util
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
-            return new[]
+            return new List<IdentityResource>
             {
                 // some standard scopes from the OIDC spec
                 new IdentityResources.OpenId(),
@@ -18,8 +19,6 @@ namespace Equinox.UI.SSO.Util
                 // custom identity resource with some consolidated claims
                 new IdentityResource("picture", new[] { JwtClaimTypes.Picture }),
 
-                // add additional identity resource
-                new IdentityResource("roles", "Roles", new[] { "role" })
             };
         }
 
@@ -28,12 +27,12 @@ namespace Equinox.UI.SSO.Util
             return new[]
             {
                 // simple version with ctor
-                new ApiResource("api1", "Some API 1")
-                                {
-                    // this is needed for introspection when using reference tokens
-                    ApiSecrets = { new Secret("secret".Sha256()) }
-                                },
-                
+                // new ApiResource("api1", "Some API 1")
+                //                {
+                //    // this is needed for introspection when using reference tokens
+                //    ApiSecrets = { new Secret("secret".Sha256()) }
+                                //},
+                //new ApiResource("demo_api", "Demo API with Swagger"),
                 // expanded version if more control is needed
                 new ApiResource
                                 {
@@ -44,36 +43,20 @@ namespace Equinox.UI.SSO.Util
 
                                     UserClaims =
                                     {
-                                        JwtClaimTypes.Name,
-                                        JwtClaimTypes.Email,
-                                        JwtClaimTypes.Picture
+                                        IdentityServerConstants.StandardScopes.OpenId,
+                                        IdentityServerConstants.StandardScopes.Profile,
+                                        IdentityServerConstants.StandardScopes.Email,
+                                        
                                     },
 
                                     Scopes =
                                     {
                                         new Scope()
                                         {
-                                            Name = "UserManagementApi.full_access",
-                                            DisplayName = "Full access",
+                                            Name = "UserManagementApi.owner-content",
+                                            DisplayName = "User Management - Full access",
                                             Description = "Full access to User Management",
-                                            UserClaims =
-                                            {
-                                                JwtClaimTypes.Name
-                                            }
-                                        },
-                                        new Scope()
-                                        {
-                                            Name = "UserManagementApi.read_access",
-                                            DisplayName = "Read access",
-                                            Description = "Read access to User Data"
-                                        },
-                                        new Scope()
-                                        {
-                                            Name = "UserManagementApi.write_access",
-                                            DisplayName = "Write access",
-                                            Description = "Write access to User data",
-
-
+                                            Required = true
                                         }
 
                                     }

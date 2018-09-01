@@ -51,8 +51,8 @@ namespace Equinox.UI.SSO
            );
 
             // configure identity
-            services.AddIdentity(Configuration);
             services.AddMvc();
+            services.AddIdentity(Configuration);
 
             services.Configure<IISOptions>(iis =>
             {
